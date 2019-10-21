@@ -29,3 +29,7 @@ def login(request):
         'form': form
     }
     return render(request, 'accounts/form.html', context)
+
+def logout(request):
+    auth_logout(request)
+    return redirect('posts:index')
