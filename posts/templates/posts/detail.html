@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load bootstrap4 %}
 {% block body %}
   <div class="jumbotron">
     <h1 class="display-4">{{post.title}}</h1>
@@ -12,4 +12,10 @@
       <input type="submit" class="btn btn-danger" value="삭제">
     </form>
   </div>
+
+  <form action="{% url 'posts:comment_create' post.id %}" method="POST">
+    {% csrf_token %}
+    {% bootstrap_form comment_form %}
+    <input type="submit" class="btn btn-warning">
+  </form>
 {% endblock %}

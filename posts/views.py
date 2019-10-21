@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import Post
-from .forms import PostForm
+from .models import Post, Comment
+from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
 
@@ -32,8 +32,10 @@ def create(request):
 @login_required
 def detail(request, id):
     post = get_object_or_404(Post, id=id)
+    comment_form = CommentForm()
     context = {
-        'post': post
+        'post': post,
+        'comment_form': comment_form,
     }
     return render(request, 'posts/detail.html', context)
 
@@ -59,4 +61,15 @@ def delete(request, id):
     post = get_object_or_404(Post, id=id)
     post.delete()
     return redirect('posts:index')
+
+@require_POST
+def comment_create(request, id):
+    comment_form = CommentForm(request.POST)
+    post = get_object_or_404(Post, id=id)
+    if comment_form.is_valid():
+        comment = comment_form.save(commit=False)
+        comment.user = request.user
+        comment.post = post
+        comment.save()
+        return redirect('posts:detail', id)
     
