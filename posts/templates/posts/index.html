@@ -1,12 +1,34 @@
 {% extends 'base.html' %}
 
 {% block body %}
-  {% for post in posts %}
-    <h3>
-      <a href="{% url 'posts:detail' post.id %}">{{post.title}}</a>
-    </h3>
-  {% empty %}
-  <h1> 등록된 게시물이 없습니다. </h1>
-  {% endfor %}
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col" class="text-center">Write by</th>
+        <th scope="col" class="text-center">Created at</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in posts %}
+        <tr>
+          <th scope="row">{{post.id}}</th>
+          <td>
+            <a href="{% url 'posts:detail' post.id %}">
+              {{post.title}}
+            </a>
+          </td>
+          <td class="text-center">{{post.user.username}}</td>
+          <td class="text-center">{{post.created_at}}</td>
+        </tr>
+      {% empty %}
+        <h4> 등록/검색된 게시물이 없습니다. </h4>
+      {% endfor %}
+    </tbody>
+  </table>
+
+
+
 
 {% endblock %}

@@ -1,34 +1,69 @@
 {% load bootstrap4 %}
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Do+Hyeon|Jua|Nanum+Gothic+Coding&display=swap" rel="stylesheet">
+    <script src="https://kit.fontawesome.com/e87731a046.js" crossorigin="anonymous"></script>
     <title>Document</title>
+    <style>
+        .jua {
+            font-family: 'Jua', sans-serif;
+        }
+        .do {
+            font-family: 'Do Hyeon', sans-serif;
+        }    
+        .go {
+            font-family: 'Nanum Gothic Coding', monospace;
+        }
+        a:link {text-decoration: none; color: #17a2b8;}
+        a:visited {text-decoration: none; color: #17a2b8;}
+
+        body {
+            background-image: url("{% static 'bono.gif' %}");
+        }
+    </style>
     {% bootstrap_css %}
 </head>
 <body>
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <a class="navbar-brand" href="{% url 'posts:index' %}">Home</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup" aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <a class="navbar-brand ml-5 do" href="{% url 'posts:index' %}">Home</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
         </button>
-        <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-            <div class="navbar-nav">
-            {% if user.is_authenticated %}
-                <a class="nav-item nav-link disabled" href="#" tabindex="-1" aria-disabled="true">{{user.username}}</a>  
-                <a class="nav-item nav-link" href="{% url 'posts:create' %}">새글작성</a>
-                <a class="nav-item nav-link" href="{% url 'accounts:logout' %}">로그아웃</a>
-            {% else %}
-                <a class="nav-item nav-link active" href="{% url 'accounts:signup' %}">가입하기<span class="sr-only">(current)</span></a>
-                <a class="nav-item nav-link" href="{% url 'accounts:login' %}">로그인</a>
-            {% endif %}
-            
-            </div>
+      
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+                {% if user.is_authenticated %}
+                    <li class="nav-item active">
+                        <a class="nav-item nav-link text-info" href="{% url 'accounts:mypage' user.id %}">{{user.username}}님</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-item nav-link text-light" href="{% url 'posts:create' %}">새 글 작성</a>
+                    </li>   
+                    <li class="nav-item">
+                        <a class="nav-item nav-link text-light" href="{% url 'accounts:logout' %}">로그아웃</a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-item nav-link active" href="{% url 'accounts:signup' %}">가입하기<span class="sr-only">(current)</span></a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-item nav-link" href="{% url 'accounts:login' %}">로그인</a>
+                    </li>
+                {% endif %}
+            </ul>
+            <form class="form-inline my-2 my-lg-0 mr-5" action="{% url 'posts:search' %}">
+                <input class="form-control mr-sm-2" type="search" placeholder="제목검색" aria-label="Search" name="keyword">
+                <button class="btn btn-outline-light my-2 my-sm-0" type="submit">Search</button>
+            </form> 
         </div>
     </nav>
-    <div class="container">
+
+    <div class="container mt-5">
         {% block body %}
         {% endblock %}
     </div>

@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% block body %}
+
+<h3 class=>My Page</h3>
+<h4>게시물</h4>
+  <table class="table">
+    <thead class="thead-dark">
+      <tr>
+        <th scope="col">#</th>
+        <th scope="col">Title</th>
+        <th scope="col" class="text-center">Write by</th>
+        <th scope="col" class="text-center">Created at</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for post in posts %}
+        <tr>
+          <th scope="row">{{post.id}}</th>
+          <td>
+            <a href="{% url 'posts:detail' post.id %}">
+              {{post.title}}
+            </a>
+          </td>
+          <td class="text-center">{{post.user.username}}</td>
+          <td class="text-center">{{post.created_at}}</td>
+        </tr>
+      {% empty %}
+        <h4> 작성한 게시물이 없습니다. </h4>
+      {% endfor %}
+    </tbody>
+  </table>
+
+<h4>댓글</h4>
+<table class="table table-sm">
+    <thead> 
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Commnet</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for comment in post.comment_set.all %}
+        <tr>
+          <td scope="row">{{comment.user.username}}</td>
+          <td>
+            {{comment.content}} 
+            <div class='text-right'>
+              <a href="{% url 'posts:comment_delete' post.id comment.id %}">
+                <i class="fas fa-backspace text-dark"></i>
+              </a> 
+            </div>
+          </td>
+        </tr>
+      {% empty %}
+        <tr class="text-center">
+          <td scope="row" colspan="2">등록한 댓글이 없습니다.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

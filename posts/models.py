@@ -13,3 +13,5 @@ class Comment(models.Model):
     post = models.ForeignKey(Post, on_delete=models.CASCADE)
     content = models.CharField(max_length=100)
     created_at = models.DateField(auto_now_add=True)
+    class Meta:
+        ordering = ('-id',)

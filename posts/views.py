@@ -3,11 +3,13 @@ from .models import Post, Comment
 from .forms import PostForm, CommentForm
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.http import require_POST
+from django.conf import settings
 
 # Create your views here.
 
 def index(request):
-    posts = Post.objects.all()
+    posts = Post.objects.order_by('-id')
+    # print(dir(settings.AUTH_USER_MODEL))
     context = {
         'posts': posts
     }
@@ -72,4 +74,20 @@ def comment_create(request, id):
         comment.post = post
         comment.save()
         return redirect('posts:detail', id)
-    
+
+@login_required
+def comment_delete(request, post_id, comment_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    comment.delete()
+    return redirect('posts:detail', post_id)
+
+
+def search(request):
+    keyword = request.GET.get('keyword')
+    # 제목
+    posts = Post.objects.filter(title__icontains=keyword)
+
+    context = {
+        'posts': posts
+    }
+    return render(request, 'posts/index.html', context)
