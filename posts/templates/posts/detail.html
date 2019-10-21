@@ -6,6 +6,10 @@
     <p class="lead">{{post.created_at}}</p>
     <hr class="my-4">
     <p>{{post.content}}</p>
-    <a class="btn btn-primary btn-lg" href="#" role="button">Learn more</a>
+    <a class="btn btn-primary" href="{% url 'posts:update' post.id %}">수정</a>
+    <form action="{% url 'posts:delete' post.id %}" method="post">
+      {% csrf_token %}
+      <input type="submit" class="btn btn-danger" value="삭제">
+    </form>
   </div>
 {% endblock %}

@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from .models import Post
 from .forms import PostForm
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_POST
 
 # Create your views here.
 
@@ -35,3 +36,27 @@ def detail(request, id):
         'post': post
     }
     return render(request, 'posts/detail.html', context)
+
+@login_required
+def update(request, id):
+    post = get_object_or_404(Post, id=id)
+    if request.method == 'POST':
+        form = PostForm(request.POST, instance=post)
+        if form.is_valid():
+            post.save()
+            return redirect('posts:detail', id)
+
+    else:
+        form = PostForm(instance=post)
+    context = {
+        'form': form
+    }
+    return render(request, 'posts/form.html', context)
+
+@login_required
+@require_POST
+def delete(request, id):
+    post = get_object_or_404(Post, id=id)
+    post.delete()
+    return redirect('posts:index')
+    
