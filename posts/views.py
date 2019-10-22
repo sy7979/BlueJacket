@@ -91,3 +91,25 @@ def search(request):
         'posts': posts
     }
     return render(request, 'posts/index.html', context)
+
+@login_required
+def like(request, id):
+    post = get_object_or_404(Post, id=id)
+    user = request.user
+    if user in post.like_users.all():
+        post.like_users.remove(user)
+    else:
+        post.like_users.add(user)
+    return redirect('posts:detail', id)
+
+@login_required
+def like_comment(request, comment_id, post_id):
+    comment = get_object_or_404(Comment, id=comment_id)
+    user = request.user
+    
+    if comment.like_users.filter(id=user.id):
+    # if user in comment.like_users.all():
+        comment.like_users.remove(user)
+    else:
+        comment.like_users.add(user)
+    return redirect('posts:detail', post_id)

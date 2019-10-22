@@ -1,12 +1,17 @@
 {% extends 'base.html' %}
 
-{% block body %}
+
+
+  <hr>
+  <hr>
+
   <table class="table">
     <thead class="thead-dark">
       <tr>
         <th scope="col">#</th>
         <th scope="col">Title</th>
         <th scope="col" class="text-center">Write by</th>
+        <th scope="col" class="text-center">Likes</th>
         <th scope="col" class="text-center">Created at</th>
       </tr>
     </thead>
@@ -20,6 +25,7 @@
             </a>
           </td>
           <td class="text-center">{{post.user.username}}</td>
+          <td class="text-center">{{post.like_users.all.count}}</td>
           <td class="text-center">{{post.created_at}}</td>
         </tr>
       {% empty %}

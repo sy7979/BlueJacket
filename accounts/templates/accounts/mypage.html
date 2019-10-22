@@ -40,16 +40,12 @@
       </tr>
     </thead>
     <tbody>
-      {% for comment in post.comment_set.all %}
+        
+      {% for comment in comments %}
         <tr>
-          <td scope="row">{{comment.user.username}}</td>
+          <td scope="row">{{comment.user}}</td>
           <td>
             {{comment.content}} 
-            <div class='text-right'>
-              <a href="{% url 'posts:comment_delete' post.id comment.id %}">
-                <i class="fas fa-backspace text-dark"></i>
-              </a> 
-            </div>
           </td>
         </tr>
       {% empty %}

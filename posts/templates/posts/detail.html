@@ -16,6 +16,11 @@
 
     <hr>
     <p class="lead">{{post.content}}</p>
+    {% if user in post.like_users.all %}
+      <a href="{% url 'posts:like' post.id %}">취소요!</a>
+    {% else %}
+      <a href="{% url 'posts:like' post.id %}">좋아용</a>
+    {% endif %}
   </div>
 
   <hr class="bg-info">
@@ -47,12 +52,22 @@
           <tr>
             <td scope="row">{{comment.user.username}}</td>
             <td>
-              {{comment.content}} 
+              {{comment.content}} [{{comment.like_users.all.count}}]
+              <div>
+                {% if user in comment.like_users.all %}
+                  <a href="{% url 'posts:like_comment' post.id comment.id %}">취소요!</a>
+                {% else %}
+                  <a href="{% url 'posts:like_comment' post.id comment.id %}">좋아용</a>
+                {% endif %}
+              
+              </div>
+              {% if comment.user == user %}
               <div class='text-right'>
                 <a href="{% url 'posts:comment_delete' post.id comment.id %}">
                   <i class="fas fa-backspace text-dark"></i>
                 </a> 
               </div>
+              {% endif %}
             </td>
           </tr>
         {% empty %}

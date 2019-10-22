@@ -40,10 +40,12 @@ def logout(request):
 
 @login_required
 def mypage(request, id):
+
     posts = Post.objects.filter(user_id=id)
     comments = Comment.objects.filter(user_id=id)
     context = {
         'posts': posts,
         'comments': comments
     }
+    
     return render(request, 'accounts/mypage.html', context)
